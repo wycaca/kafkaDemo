@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>demo</title>
+    <style type="text/css">
+        body {
+            font-family: "pingfang sc";
+        }
+
+        table, table tr th, table tr td {
+            border: 1px solid #000000;
+        }
+    </style>
+</head>
+<body>
+<div>
+    your personalized portfolio statement
+    <div>
+        <p>jan 12 2023</p>
+        <p>statement period</p>
+        <p>from （m/d/y）to (m/d/y)</p>
+    </div>
+    <div>
+        <p>${name}</p>
+        <p class="font_3">${email}</p>
+        <p class="font_3">${tel}</p>
+        <p class="font_3">${address}</p>
+    </div>
+
+    <table>
+        <tr>
+            <th>currency</th>
+            <th>current value</th>
+            <th>current value(usd)</th>
+            <th>current allocation</th>
+        </tr>
+        <#list currencies as currency>
+            <tr>
+                <td>${currency.name}</td>
+                <td>${currency.value}</td>
+                <td>${currency.valueUsd}</td>
+                <td>${currency.allocation}</td>
+            </tr>
+        </#list>
+    </table>
+</div>
+</body>
+</html>

@@ -1,6 +1,7 @@
 package com.citi.cbk.controller;
 
 import com.citi.cbk.entity.EditMsg;
+import com.citi.cbk.entity.TableMsg;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,22 @@ public class TestController {
     @PostMapping(path = "send")
     public String send(@RequestBody EditMsg msg) {
         template.send("topic1", msg).addCallback(success -> {
+            // 消息发送到的topic
+            String topic = success.getRecordMetadata().topic();
+            // 消息发送到的分区
+            int partition = success.getRecordMetadata().partition();
+            // 消息在分区内的offset
+            long offset = success.getRecordMetadata().offset();
+            logger.info("Provider send msg: {}, {}", msg, topic + "-" + partition + "-" + offset);
+        }, failure -> {
+            logger.error("Provider send msg failed: {}", failure.getMessage());
+        });
+        return "send success";
+    }
+
+    @PostMapping(path = "/table/send")
+    public String tableSend(@RequestBody TableMsg msg) {
+        template.send("test-topic", msg).addCallback(success -> {
             // 消息发送到的topic
             String topic = success.getRecordMetadata().topic();
             // 消息发送到的分区
