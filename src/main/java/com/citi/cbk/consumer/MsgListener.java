@@ -29,6 +29,7 @@ public class MsgListener {
     private void createTelAdvice(EditMsg msg) {
         Map<String, Object> params = new HashMap<>();
         params.put("tel", msg.getTel());
+        // todo handle type
         PdfCreator.createPDF("phone-advice", params, "phone-advice-" + msg.getId() + ".pdf");
     }
 }
