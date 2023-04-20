@@ -34,3 +34,21 @@ bin/kafka-topics.sh --bootstrap-server localhost:9092 --list
 bin/kafka-console-producer.sh --bootstrap-server localhost:9092 --topic topic1
 # 消费者
 bin/kafka-console-consumer.sh --bootstrap-server iZuf653yzvax5j5lbfa5psZ:9092 --from-beginning --topic topic1
+
+
+
+# docker 镜像加速器
+sudo mkdir -p /etc/docker
+sudo tee /etc/docker/daemon.json <<-'EOF'
+{
+  "registry-mirrors": ["https://tm3jxnh5.mirror.aliyuncs.com"]
+}
+EOF
+sudo systemctl daemon-reload
+sudo systemctl restart docker
+
+# 拉取镜像
+docker pull provectuslabs/kafka-ui:latest
+
+# 创建启动UI容器
+docker-compose up -d kafka-ui

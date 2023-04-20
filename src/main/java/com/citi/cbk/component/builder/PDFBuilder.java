@@ -73,7 +73,7 @@ public class PDFBuilder extends PdfPageEventHelper {
     private void addPage(PdfWriter writer, Document document) {
         if (headerFooterBuilder != null) {
             //1.初始化字体
-            initFront();
+            initFont();
 //            //2.写入页眉
 //            headerFooterBuilder.writeHeader(writer, document, data, fontDetail, template);
 //            //3.写入前半部分页脚
@@ -98,9 +98,9 @@ public class PDFBuilder extends PdfPageEventHelper {
     /**
      * 初始化字体
      */
-    private void initFront() {
+    private void initFont() {
         if (StringUtils.isEmpty(fontFileName)) {
-            throw new PDFException("PDF文档字体未设置!");
+            throw new PDFException("Pls set PDF font!");
         }
         try {
             if (bf == null) {
@@ -112,11 +112,11 @@ public class PDFBuilder extends PdfPageEventHelper {
             }
             if (fontDetail == null) {
                 fontDetail = new Font(bf, fontSize, Font.NORMAL);// 数据体字体
-                log.info("PDF文档字体初始化完成!");
+                log.info("PDF font init finished!");
             }
         } catch (DocumentException | IOException e) {
-            log.error("字体初始化失败{}", ExceptionUtils.getStackTrace(e));
-            throw new PDFException("字体初始化失败", e);
+            log.error("font init error{}", ExceptionUtils.getStackTrace(e));
+            throw new PDFException("font set error", e);
         }
     }
 

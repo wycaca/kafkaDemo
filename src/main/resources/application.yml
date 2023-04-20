@@ -13,9 +13,25 @@ spring:
           json:
             trusted:
               packages: "com.citi.cbk.entity"
+  mail:
+    host: smtp.163.com
+    username: rzyfbj119@163.com
+    password: asdasd
+    default-encoding: UTF-8
+    port: 465
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          socketFactory:
+            port: 465
+            class: javax.net.ssl.SSLSocketFactory
 
 kafka:
   topics:
-      name: topic1
-      num-partitions: 3
-      replication-factor: 1
+    name: topic1
+    num-partitions: 3
+    replication-factor: 1
