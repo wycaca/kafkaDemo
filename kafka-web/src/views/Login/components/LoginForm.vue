@@ -111,7 +111,7 @@ const signIn = async () => {
           if (appStore.getDynamicRouter) {
             getRole()
           } else {
-            await permissionStore.generateRoutes('none').catch(() => { })
+            await permissionStore.generateRoutes('none').catch(() => {})
             permissionStore.getAddRouters.forEach((route) => {
               addRoute(route as RouteRecordRaw) // 动态添加可访问路由表
             })
@@ -145,8 +145,8 @@ const getRole = async () => {
     wsCache.set('roleRouters', routers)
 
     formData.username === 'admin'
-      ? await permissionStore.generateRoutes('admin', routers).catch(() => { })
-      : await permissionStore.generateRoutes('test', routers).catch(() => { })
+      ? await permissionStore.generateRoutes('admin', routers).catch(() => {})
+      : await permissionStore.generateRoutes('test', routers).catch(() => {})
 
     permissionStore.getAddRouters.forEach((route) => {
       addRoute(route as RouteRecordRaw) // 动态添加可访问路由表
@@ -158,7 +158,14 @@ const getRole = async () => {
 </script>
 
 <template>
-  <Form :schema="schema" :rules="rules" label-position="top" hide-required-asterisk size="large" @register="register">
+  <Form
+    :schema="schema"
+    :rules="rules"
+    label-position="top"
+    hide-required-asterisk
+    size="large"
+    @register="register"
+  >
     <template #title>
       <h2 class="text-2xl font-bold text-center w-[100%]">{{ t('login.login') }}</h2>
     </template>
