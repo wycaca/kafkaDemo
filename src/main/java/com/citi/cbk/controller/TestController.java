@@ -17,6 +17,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.util.ClassUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,7 +42,6 @@ public class TestController {
         }, failure -> {
             logger.error("Provider send msg failed: {}", failure.getMessage());
         });
-
 
         Map<String, Object> response = new HashMap<>();
         response.put("code", "200");
@@ -74,6 +74,13 @@ public class TestController {
             pdfType = "phone-advice-";
         }
         String path = classpath + "pdf/" + pdfType +  id + ".pdf";
+
+        File file = new File(path);
+        // 检查文件是否存在, 不存在则提示
+        if (!file.exists()) {
+            return ResponseEntity.notFound().build();
+        }
+
         String contentDisposition = ContentDisposition
                 .builder("attachment")
                 .filename(path)
