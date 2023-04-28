@@ -1,16 +1,19 @@
 <template>
-  <el-form label-width="100px" :model="user" :rules="rules" ref="editForm">
+  <el-form label-width="200px" :model="user" :rules="rules" ref="editForm" class="edit-form-class">
     <el-form-item label="Name">
-      <el-input v-model="user.id" />
+      <el-col :span="8">
+        <el-input v-model="user.id" />
+      </el-col>
     </el-form-item>
     <el-form-item label="Phone">
-      <el-input v-model="user.tel" />
+      <el-col :span="8">
+        <el-input v-model="user.tel" />
+      </el-col>
     </el-form-item>
-    <el-form-item label="Email" prop="email">
-      <el-input v-model="user.email" />
-    </el-form-item>
-    <el-form-item label="Address">
-      <el-input v-model="user.address" />
+    <el-form-item label="Send to Email" prop="email">
+      <el-col :span="8">
+        <el-input v-model="user.email" />
+      </el-col>
     </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="submitForm" :loading="loading"> Modifty </el-button>
@@ -35,14 +38,12 @@ const pdfLoading = ref(false)
 const user = reactive<EditMsg>({
   id: '123',
   tel: '123456789012',
-  email: '123@mail.com',
-  address: 'asd'
+  email: '123@mail.com'
 })
 
 const rules = {
   //验证邮箱
   email: [
-    { required: true, message: "Can't be empty", trigger: 'blur' },
     {
       pattern:
         /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
@@ -76,7 +77,8 @@ const checkPdf = () => {
     path: '/pdf',
     query: {
       type: 'phone',
-      id: user.id
+      id: user.id,
+      toMail: user.email
     }
   })
 }
@@ -97,4 +99,4 @@ const checkPdf = () => {
 // }
 </script>
 
-<style></style>
+<style scoped></style>

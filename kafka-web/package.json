@@ -6,7 +6,7 @@
   "private": false,
   "scripts": {
     "i": "pnpm install",
-    "dev": "vite --mode base",
+    "dev": "npm run lint:format && vite --mode base",
     "ts:check": "vue-tsc --noEmit",
     "build": "vite build --mode dev",
     "build:dev": "npm run ts:check && vite build --mode dev",
