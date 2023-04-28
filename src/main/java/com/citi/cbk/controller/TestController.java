@@ -1,7 +1,9 @@
 package com.citi.cbk.controller;
 
 import com.citi.cbk.entity.EditMsg;
+import com.citi.cbk.entity.SendMailRequest;
 import com.citi.cbk.entity.TableMsg;
+import com.citi.cbk.util.MailUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
@@ -63,6 +65,20 @@ public class TestController {
         }, failure -> {
             logger.error("Provider send msg failed: {}", failure.getMessage());
         });
+        return "send success";
+    }
+
+    @PostMapping(path = "/mail/send")
+    public String sendMail(@RequestBody SendMailRequest sendMailRequest) {
+        String classpath = ClassUtils.getDefaultClassLoader().getResource("").getPath();
+        String path = classpath + "pdf/" + sendMailRequest.getFileName();
+
+        File file = new File(path);
+        // 检查文件是否存在, 不存在则提示
+        if (!file.exists()) {
+            return "file not exist";
+        }
+        MailUtil.sendMail(sendMailRequest.getToMail(), path);
         return "send success";
     }
 
