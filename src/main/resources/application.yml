@@ -2,6 +2,8 @@ server:
   port: 8189
 
 spring:
+  mvc:
+    static-path-pattern: /static/**
   kafka:
     bootstrap-servers:
     producer:

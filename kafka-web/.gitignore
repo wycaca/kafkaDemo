@@ -9,8 +9,8 @@ lerna-debug.log*
 
 node_modules
 .DS_Store
-dist
-dist-ssr
+# 打包文件夹
+dist-*
 coverage
 *.local
 pnpm-debug
