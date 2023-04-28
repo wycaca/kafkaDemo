@@ -77,12 +77,6 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
         </dependency>
-        <!-- echarts -->
-        <dependency>
-            <groupId>org.icepear.echarts</groupId>
-            <artifactId>echarts-java</artifactId>
-            <version>1.0.7</version>
-        </dependency>
 
         <!-- itextpdf -->
         <dependency>
@@ -116,6 +110,12 @@
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

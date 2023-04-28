@@ -6,8 +6,8 @@ import freemarker.cache.FileTemplateLoader;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateExceptionHandler;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.util.ClassUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,6 +19,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * Created by fgm on 2017/4/22.
  * FREEMARKER 模板工具类
  */
+@Slf4j
 public class FreeMarkerUtil {
 
     private static final String WINDOWS_SPLIT = "\\";
@@ -100,18 +101,12 @@ public class FreeMarkerUtil {
      * @return 匹配到的模板名
      */
     public static String getPDFTemplatePath(String fileName) {
-        String classpath = ClassUtils.getDefaultClassLoader().getResource("").getPath();
-        String templatePath = classpath + "/templates";
-        File file = new File(templatePath);
-        // 检查文件夹
-        if (!file.isDirectory()) {
-            throw new PDFException("Dir templates doesn't exist, pls check!");
-        }
+        String path = PathUtil.getClassResPath("templates");
         // 确认文件
         if (!fileName.contains(".")) {
             fileName = fileName + ".ftl";
         }
-        file = new File(templatePath + "/" + fileName);
+        File file = new File(path + fileName);
         if (!file.isFile()) {
             throw new PDFException("Template file " + fileName + " doesn't exist, pls check!");
         }

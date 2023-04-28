@@ -6,7 +6,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.springframework.util.ClassUtils;
 
 @Slf4j
 public class PdfCreator {
@@ -19,8 +18,7 @@ public class PdfCreator {
             PDFKit kit = new PDFKit();
             kit.setHeaderFooterBuilder(headerFooter);
             //设置输出路径
-            String classpath = ClassUtils.getDefaultClassLoader().getResource("").getPath();
-            kit.setSaveFilePath(classpath + "/pdf/" + PDFFileName);
+            kit.setSaveFilePath(PDFKit.getPdfPath() + PDFFileName);
             return kit.exportToFile(templateFileName, PDFFileName, data);
         } catch (Exception e) {
             log.error("create PDF failed: {}", ExceptionUtils.getStackTrace(e));

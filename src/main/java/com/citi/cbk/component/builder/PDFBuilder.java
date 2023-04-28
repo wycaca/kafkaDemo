@@ -1,5 +1,6 @@
 package com.citi.cbk.component.builder;
 
+import com.citi.cbk.component.PDFKit;
 import com.citi.cbk.exception.PDFException;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -11,7 +12,6 @@ import com.itextpdf.text.pdf.PdfWriter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.springframework.util.ClassUtils;
 
 import java.io.IOException;
 
@@ -105,8 +105,7 @@ public class PDFBuilder extends PdfPageEventHelper {
         try {
             if (bf == null) {
                 //添加字体，以支持中文
-                String classpath = ClassUtils.getDefaultClassLoader().getResource("").getPath();
-                String fontPath = classpath + "fonts/" + fontFileName;
+                String fontPath = PDFKit.getFontPath()+ "/" + fontFileName;
                 //创建基础字体
                 bf = BaseFont.createFont(fontPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
             }

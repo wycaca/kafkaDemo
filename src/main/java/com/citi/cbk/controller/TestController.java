@@ -1,5 +1,6 @@
 package com.citi.cbk.controller;
 
+import com.citi.cbk.component.PDFKit;
 import com.citi.cbk.entity.EditMsg;
 import com.citi.cbk.entity.SendMailRequest;
 import com.citi.cbk.entity.TableMsg;
@@ -16,7 +17,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.util.ClassUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
@@ -70,8 +70,8 @@ public class TestController {
 
     @PostMapping(path = "/mail/send")
     public String sendMail(@RequestBody SendMailRequest sendMailRequest) {
-        String classpath = ClassUtils.getDefaultClassLoader().getResource("").getPath();
-        String path = classpath + "pdf/" + sendMailRequest.getFileName();
+        String pdfPath = PDFKit.getPdfPath();
+        String path = pdfPath + sendMailRequest.getFileName();
 
         File file = new File(path);
         // 检查文件是否存在, 不存在则提示
@@ -84,12 +84,12 @@ public class TestController {
 
     @GetMapping("pdf")
     public ResponseEntity<Resource> download(@RequestParam String type, @RequestParam String id) {
-        String classpath = ClassUtils.getDefaultClassLoader().getResource("").getPath();
+        String pdfPath = PDFKit.getPdfPath();
         String pdfType = "phone-advice-";
         if ("phone".equals(type)) {
             pdfType = "phone-advice-";
         }
-        String path = classpath + "pdf/" + pdfType +  id + ".pdf";
+        String path = pdfPath + pdfType +  id + ".pdf";
 
         File file = new File(path);
         // 检查文件是否存在, 不存在则提示

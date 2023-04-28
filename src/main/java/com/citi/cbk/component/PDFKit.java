@@ -6,6 +6,7 @@ import com.citi.cbk.exception.PDFException;
 import com.citi.cbk.util.FontUtil;
 import com.citi.cbk.util.FreeMarkerUtil;
 import com.citi.cbk.util.IOUtil;
+import com.citi.cbk.util.PathUtil;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.pdf.BaseFont;
@@ -18,12 +19,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
-import org.springframework.util.ClassUtils;
 import org.xhtmlrenderer.pdf.ITextFontResolver;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 @Slf4j
@@ -42,7 +44,7 @@ public class PDFKit {
      * @description 导出pdf到文件
      */
     public String exportToFile(String templateFileName, String PDFFileName, Object data) {
-        String htmlData = FreeMarkerUtil.getContent(templateFileName, data);
+        String htmlData =  FreeMarkerUtil.getContent(templateFileName, data);
         if (StringUtils.isEmpty(saveFilePath)) {
             saveFilePath = getDefaultSavePath(PDFFileName);
         }
@@ -82,7 +84,6 @@ public class PDFKit {
             IOUtils.closeQuietly(outputStream);
         }
         return saveFilePath;
-
     }
 
     /**
@@ -93,25 +94,25 @@ public class PDFKit {
      * @param response HttpServletResponse
      * @return
      */
-    public OutputStream exportToResponse(String ftlPath, Object data, HttpServletResponse response) {
-        String html = FreeMarkerUtil.getContent(ftlPath, data);
-        try {
-            OutputStream out = null;
-            ITextRenderer render = null;
-            out = response.getOutputStream();
-            //设置文档大小
-            Document document = new Document(PageSize.A4);
-            PdfWriter writer = PdfWriter.getInstance(document, out);
-            //设置页眉页脚
-            PDFBuilder builder = new PDFBuilder(headerFooterBuilder, data);
-            writer.setPageEvent(builder);
-            //输出为PDF文件
-            convertToPDF(writer, document, html);
-            return out;
-        } catch (Exception ex) {
-            throw new PDFException("PDF export to response fail", ex);
-        }
-    }
+//    public OutputStream exportToResponse(String ftlPath, Object data, HttpServletResponse response) {
+//        String html = FreeMarkerUtil.getContent(ftlPath, data);
+//        try {
+//            OutputStream out = null;
+//            ITextRenderer render = null;
+//            out = response.getOutputStream();
+//            //设置文档大小
+//            Document document = new Document(PageSize.A4);
+//            PdfWriter writer = PdfWriter.getInstance(document, out);
+//            //设置页眉页脚
+//            PDFBuilder builder = new PDFBuilder(headerFooterBuilder, data);
+//            writer.setPageEvent(builder);
+//            //输出为PDF文件
+//            convertToPDF(writer, document, html);
+//            return out;
+//        } catch (Exception ex) {
+//            throw new PDFException("PDF export to response fail", ex);
+//        }
+//    }
 
     /**
      * PDF文件生成
@@ -180,8 +181,8 @@ public class PDFKit {
      * 创建默认保存路径
      */
     private String getDefaultSavePath(String fileName) {
-        String classpath = ClassUtils.getDefaultClassLoader().getResource("").getPath();
-        String saveFilePath = classpath + "pdf/" + fileName;
+        String pdfPath = getPdfPath();
+        String saveFilePath = pdfPath + fileName;
         File f = new File(saveFilePath);
         if (!f.getParentFile().exists()) {
             f.mkdirs();
@@ -193,7 +194,13 @@ public class PDFKit {
      * 获取字体设置路径
      */
     public static String getFontPath() {
-        String classpath = ClassUtils.getDefaultClassLoader().getResource("").getPath();
-        return classpath + "fonts";
+        return PathUtil.getClassResPath("fonts");
+    }
+
+    /**
+     * 获取pdf路径
+     */
+    public static String getPdfPath() {
+        return PathUtil.getClassParentPath("pdf");
     }
 }
