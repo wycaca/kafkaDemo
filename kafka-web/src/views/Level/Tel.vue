@@ -27,7 +27,7 @@ import { reactive, ref, unref } from 'vue'
 import { useRouter } from 'vue-router'
 import { editApi } from '@/api/test'
 import type { EditMsg } from '@/api/test/types'
-import { ElForm, ElFormItem, ElButton, ElInput } from 'element-plus'
+import { ElForm, ElFormItem, ElButton, ElInput, ElCol } from 'element-plus'
 import type { FormInstance } from 'element-plus'
 
 const { push } = useRouter()
