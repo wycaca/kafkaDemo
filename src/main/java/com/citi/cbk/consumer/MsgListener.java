@@ -9,12 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,14 +28,9 @@ public class MsgListener {
     void listenForEditMsg(EditMsg msg) {
         logger.info("Creating the tel advice, {}", msg.getTel());
         String path = createTelAdvice(msg);
-        if (path != null) {
-            try {
-                sendMail(path);
-            } catch (MessagingException e) {
-                logger.error("send email error, ", e);
-            }
-        }
-
+//        if (path != null) {
+//            MailUtil.sendMail(msg.getEmail(), path);
+//        }
     }
 
     @KafkaListener(id = "tableMsgListener", topics = "test-topic")
@@ -52,17 +43,5 @@ public class MsgListener {
         params.put("tel", msg.getTel());
         // todo handle type
         return PdfCreator.createPDF("phone-advice", params, "phone-advice-" + msg.getId() + ".pdf");
-    }
-
-    public void sendMail(String filePath) throws MessagingException {
-        MimeMessage mimeMessage = mailSender.createMimeMessage();
-        MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true);
-        messageHelper.setFrom(sendMail);
-        messageHelper.setTo("rzyfbj119@163.com");
-        messageHelper.setSubject("Tel Advice");
-        messageHelper.setText("Please check the advice!");
-        File file = new File(filePath);
-        messageHelper.addAttachment(file.getName(), file);
-        mailSender.send(mimeMessage);
     }
 }
