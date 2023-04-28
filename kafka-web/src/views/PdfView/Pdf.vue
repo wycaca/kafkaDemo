@@ -53,18 +53,13 @@ const loadPdf = async () => {
   // console.log('res', res)
   if (res) {
     url.value = window.URL.createObjectURL(res.data)
-    pdfName.value = getFileName(res.headers['content-disposition'])
+    pdfName.value = getFileName(pdfId)
     // console.log(pdfName.value)
   }
 }
 
-const getFileName = (url: string) => {
-  const name = ref('')
-  if (url !== null && url !== '') {
-    name.value = url.substring(url.lastIndexOf('/') + 1).replaceAll('"', '')
-  } else {
-    name.value = url
-  }
+const getFileName = (id: string) => {
+  const name = ref('phone-advice-' + id + ".pdf");
   return name.value
 }
 
