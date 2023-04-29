@@ -42,3 +42,4 @@ hs_err_pid*
 
 # pdf file
 pdf/
+/src/main/resources/static/**

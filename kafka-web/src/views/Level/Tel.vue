@@ -10,11 +10,6 @@
         <el-input v-model="user.tel" />
       </el-col>
     </el-form-item>
-    <el-form-item label="Send to Email" prop="email">
-      <el-col :span="8">
-        <el-input v-model="user.email" />
-      </el-col>
-    </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="submitForm" :loading="loading"> Modifty </el-button>
       <el-button type="primary" @click="checkPdf" :loading="pdfLoading"> CheckPDF </el-button>
@@ -77,8 +72,7 @@ const checkPdf = () => {
     path: '/pdf',
     query: {
       type: 'phone',
-      id: user.id,
-      toMail: user.email
+      id: user.id
     }
   })
 }

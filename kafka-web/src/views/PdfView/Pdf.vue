@@ -3,6 +3,9 @@
     <div class="button-class">
       <el-button type="primary" @click="downloadPdf"> Download </el-button>
       <el-button type="primary" @click="sendMail"> Send by Email </el-button>
+      <el-col :span="4">
+        <el-input v-model="mail" width="200px" />
+      </el-col>
     </div>
     <vue-pdf-embed
       :source="url"
@@ -23,7 +26,7 @@ import { getPdfApi, sendMailApi } from '@/api/test'
 import type { SendMailRequest } from '@/api/test/types'
 
 import VuePdfEmbed from 'vue-pdf-embed'
-import { createLoadingTask } from 'vue3-pdfjs'
+import { createLoadingTask } from 'vue3-pdfjs/esm'
 import { ElButton } from 'element-plus'
 
 const router = useRoute()
@@ -32,7 +35,8 @@ const loading = ref(false)
 
 const pdfId = router.query.id as string
 const pdfType = router.query.type as string
-const toMail = router.query.toMail as string
+
+const mail = ref('')
 
 const sendMailRequest = reactive<SendMailRequest>({
   toMail: '',
@@ -59,11 +63,11 @@ const loadPdf = async () => {
 }
 
 const getFileName = (id: string) => {
-  const name = ref('phone-advice-' + id + ".pdf");
+  const name = ref('phone-advice-' + id + '.pdf')
   return name.value
 }
 
-const downloadPdf = async () => {
+const downloadPdf = () => {
   const a = document.createElement('a')
   a.href = url.value
   a.style.display = 'none'
@@ -73,7 +77,7 @@ const downloadPdf = async () => {
 }
 
 const sendMail = async () => {
-  sendMailRequest.toMail = toMail
+  sendMailRequest.toMail = mail.value
   sendMailRequest.fileName = pdfName.value
   console.log('sendMailRequest', sendMailRequest)
   await sendMailApi(sendMailRequest)
