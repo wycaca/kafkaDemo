@@ -27,7 +27,7 @@ import type { SendMailRequest } from '@/api/test/types'
 
 import VuePdfEmbed from 'vue-pdf-embed'
 import { createLoadingTask } from 'vue3-pdfjs/esm'
-import { ElButton } from 'element-plus'
+import { ElButton, ElInput, ElCol } from 'element-plus'
 
 const router = useRoute()
 
