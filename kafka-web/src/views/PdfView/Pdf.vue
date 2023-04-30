@@ -7,27 +7,20 @@
         <el-input v-model="mail" width="200px" />
       </el-col>
     </div>
-    <vue-pdf-embed
-      :source="url"
-      class="vue-pdf-embed"
-      v-for="i in pdfPageNum"
-      :key="i"
-      :page="i"
-      width="1200"
-    />
+
+    <VuePdf class="vue-pdf-embed" v-for="page in pdfPageNum" :key="page" :src="url" :page="page" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref, reactive } from 'vue'
 import { useRoute } from 'vue-router'
+import { ElButton, ElInput, ElCol } from 'element-plus'
+
+import { VuePdf, createLoadingTask } from 'vue3-pdfjs'
 
 import { getPdfApi, sendMailApi } from '@/api/test'
 import type { SendMailRequest } from '@/api/test/types'
-
-import VuePdfEmbed from 'vue-pdf-embed'
-import { createLoadingTask } from 'vue3-pdfjs/esm'
-import { ElButton, ElInput, ElCol } from 'element-plus'
 
 const router = useRoute()
 
@@ -48,18 +41,26 @@ const url = ref('')
 const pdfPageNum = ref(0)
 
 const loadPdf = async () => {
-  const res = await getPdfApi({
-    type: pdfType,
-    id: pdfId
-  }).catch(() => {
-    alert('error')
-  })
-  // console.log('res', res)
-  if (res) {
-    url.value = window.URL.createObjectURL(res.data)
-    pdfName.value = getFileName(pdfId)
-    // console.log(pdfName.value)
-  }
+  // const res = await getPdfApi({
+  //   type: pdfType,
+  //   id: pdfId
+  // }).catch(() => {
+  //   alert('error')
+  // })
+  // // console.log('res', res)
+  // if (res) {
+  //   const binaryData = []
+  //   binaryData.push(res.data)
+  //   //获取blob链接
+  //   url.value = window.URL.createObjectURL(new Blob(binaryData, { type: 'application/pdf' }))
+  //   console.log('url', url)
+  //   // url.value = window.URL.createObjectURL(res.data)
+  //   pdfName.value = getFileName(pdfId)
+  //   // console.log(pdfName.value)
+  // }
+
+  url.value = "http://线上应用地址/test/pdf?type=phone&id=" + pdfId
+  pdfName.value = getFileName(pdfId)
 }
 
 const getFileName = (id: string) => {
@@ -89,8 +90,8 @@ onMounted(() => {
   loadPdf().then(() => {
     loading.value = true
     const loadingTask = createLoadingTask(url.value)
-    loadingTask.promise.then((pdf: { numPages: number }) => {
-      pdfPageNum.value = pdf.numPages
+    loadingTask.promise.then((pdf: { numPages }) => {
+      pdfPageNum.value = parseInt(pdf.numPages)
       loading.value = false
     })
   })
